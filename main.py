@@ -25,11 +25,11 @@ menu_transferencia(nav)
 # Conectar com a planilha google
 dep_origem = 'Almox central'
 dep_destino = 'mat fora uso'
-rec = '028844'
+rec = ['028844','034953','110012','028844','034953','110012','028844','034953','110012']
 # 034953
 # 110012
 
 qtd=1  
 
-for i in range(100): 
-    transferindo(nav,dep_origem,dep_destino,rec,qtd)
+for recurso in rec: 
+    transferindo(nav,dep_origem,dep_destino,recurso,qtd)

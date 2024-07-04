@@ -32,8 +32,11 @@ def menu_transferencia(nav):
     
     #menu
     try:
-        WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label'))).click()
+        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
+            (By.CLASS_NAME, 'menuBar-button-label')))
+        time.sleep(2.5)
+        menu.click()
+        time.sleep(2.5)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -56,9 +59,11 @@ def menu_transferencia(nav):
     
     #menu
     try:
-        WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label'))).click()
-        print('Menu aberto')
+        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
+            (By.CLASS_NAME, 'menuBar-button-label')))
+        time.sleep(2.5)
+        menu.click()
+        time.sleep(2.5)
     except TimeoutException:
         print('Erro ao clicar no menu')
         return
@@ -68,8 +73,11 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         
     #menu
     try:
-        WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label'))).click()
+        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
+            (By.CLASS_NAME, 'menuBar-button-label')))
+        time.sleep(2.5)
+        menu.click()
+        time.sleep(2.5)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -81,7 +89,15 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
     time.sleep(0.5)
     click_producao = test_list.loc[test_list[0] == 'Solicitação de transferência entre depósitos'].reset_index(drop=True)['index'][0]
     lista_menu[click_producao].click()
-    time.sleep(7)
+    
+    while True:
+        elements = nav.find_elements(By.XPATH, '/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]/span[2]')
+        if len(elements) >= 1:
+            print('Elemento encontrado')
+            break
+        else:
+            print('...Carregando')
+            time.sleep(1)  # Esperar 1 segundo antes de verificar novamente 
     
     #Mudando de iframe
     iframes(nav)
@@ -111,7 +127,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         print('Depósito origem')
         deposito_origem=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="solicitacoes"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr[9]/td[2]/table/tbody/tr/td[1]')))
         deposito_origem.click()
-        
+        print('Clicou no Depósito origem')
         deposito_origem_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="solicitacoes"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr[9]/td[2]/table/tbody/tr/td[1]/input')))
         deposito_origem_input.clear()
         deposito_origem_input.send_keys(dep_origem)
@@ -194,6 +210,16 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         nav.execute_script("arguments[0].click();", button)
 
         nav.switch_to.default_content()
+
+        while True:
+            elements = nav.find_elements(By.XPATH, '//*[@id="confirm"]')
+            if len(elements) >= 1:
+                print('Elemento encontrado')
+                break
+            else:
+                print('...Carregando')
+                time.sleep(1)  # Esperar 1 segundo antes de verificar novamente
+
         confirmar=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
         confirmar.click()
         iframes(nav)
@@ -209,8 +235,17 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         baixar.click()
         
         data_baixa=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]')))
-        data_baixa.click
+        data_baixa.click()
         
+        while True:
+            elements = nav.find_elements(By.XPATH, '//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]/input')
+            if len(elements) >= 1:
+                print('Elemento encontrado')
+                break
+            else:
+                print('...Carregando')
+                time.sleep(1)  # Esperar 1 segundo antes de verificar novamente
+
         data_baixa_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]/input')))
         data_baixa_input.clear()
         time.sleep(1)
@@ -218,10 +253,40 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         time.sleep(1)
         
         nav.switch_to.default_content()
+
         confirmar_baixa=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td')))
         confirmar_baixa.click()
-        time.sleep(10)
-        
+        mensagem_erro = None
+        while True:
+            elements = nav.find_elements(By.XPATH, '/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]/span[2]')
+            if len(elements) >= 1:
+                print('Elemento encontrado')
+                break
+            else:
+                if len(nav.find_elements(By.XPATH, '//*[@id="confirm"]')) >= 1:
+                    time.sleep(1)
+                    mensagem_erro = nav.find_elements(By.CLASS_NAME, 'message_errorToHtml')
+                    print(mensagem_erro[0].text)
+                    confirm = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
+                    confirm.click()
+                    break
+
+                confirmar_baixa.click()
+                print('...Carregando')
+                time.sleep(1)  # Esperar 1 segundo antes de verificar novamente 
+        if mensagem_erro:
+            try:
+                print('clicando em fechar aba')
+                fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
+                fechar_aba.click()
+                time.sleep(1)
+            except TimeoutException:
+                print('erro ao fechar aba')
+                return
+        return
+            # Registrar no Google Sheets 
+            # Fechar Aba
+            # Recomeçar o processo
     except TimeoutException:
         print('erro ao baixar')
         return
