@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import TimeoutException,StaleElementReferenceException
 from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.keys import Keys
@@ -81,7 +81,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
-        return
+        return 'Erro ao clicar no menu'
     time.sleep(.5)
     
     #Clicando em solicitação de transferencia entre depositos
@@ -90,10 +90,10 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
     click_producao = test_list.loc[test_list[0] == 'Solicitação de transferência entre depósitos'].reset_index(drop=True)['index'][0]
     lista_menu[click_producao].click()
     
+    # Carregando ao clicar no MENU
     while True:
         elements = nav.find_elements(By.XPATH, '/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]/span[2]')
         if len(elements) >= 1:
-            print('Elemento encontrado')
             break
         else:
             print('...Carregando')
@@ -108,8 +108,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         mudar_visualizacao=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="solicitacoes"]/thead/tr[1]/td[1]/table/tbody/tr/td[2]/table/tbody/tr/td[1]')))
         mudar_visualizacao.click()
     except TimeoutException:
-        print('erro ao mudar visualização')
-        return
+        print('Erro ao mudar visualização')
+        return 'Erro ao mudar visualização'
     time.sleep(.5)
     
     #Clicando em insert
@@ -118,8 +118,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         insert=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="solicitacoes"]/thead/tr[1]/td[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]')))
         insert.click()
     except TimeoutException:
-        print('erro ao da insert')
-        return
+        print('Erro ao da insert')
+        return 'Erro ao da insert'
     time.sleep(.5)
     
     #inputando deposito origem 
@@ -134,8 +134,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         deposito_origem_input.send_keys(Keys.TAB)
         
     except TimeoutException:
-        print(f'erro ao inputar Depósito origem: {dep_origem}')
-        return
+        print(f'Erro ao inputar Depósito origem: {dep_origem}')
+        return f'Erro ao inputar Depósito origem: {dep_origem}'
     time.sleep(.5)
     
     #inputando deposito destino
@@ -150,8 +150,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         deposito_destino_input.send_keys(Keys.TAB)
         
     except TimeoutException:
-        print(f'erro ao inputar Depósito destino: {dep_destino}')
-        return
+        print(f'Erro ao inputar Depósito destino: {dep_destino}')
+        return f'Erro ao inputar Depósito destino: {dep_destino}'
     time.sleep(.5)
     
     #inputando recurso
@@ -166,8 +166,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         recurso_input.send_keys(Keys.TAB)
         
     except TimeoutException:
-        print(f'erro ao inputar recurso: {rec}')
-        return
+        print(f'Erro ao inputar recurso: {rec}')
+        return f'Erro ao inputar recurso: {rec}'
     time.sleep(.5)
     
     #inputando quantidade
@@ -182,8 +182,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         quantidade_input.send_keys(Keys.TAB)
         
     except TimeoutException:
-        print(f'erro ao inputar quantidade: {qtd}')
-        return
+        print(f'Erro ao inputar quantidade: {qtd}')
+        return f'Erro ao inputar quantidade: {qtd}'
     time.sleep(.5)
         
     #Clicando em confirmar (insert)
@@ -192,8 +192,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         confirmar=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="solicitacoes"]/thead/tr[1]/td[1]/table/tbody/tr/td[2]/table/tbody/tr/td[4]')))
         confirmar.click()
     except TimeoutException:
-        print('erro ao confirmar')
-        return
+        print('Erro ao confirmar')
+        return 'Erro ao confirmar'
     time.sleep(.5)
     
     #Clicando em aprovar
@@ -211,10 +211,10 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
 
         nav.switch_to.default_content()
 
+        # Carregando até aparecer o MODAL para CONFIRMAR
         while True:
             elements = nav.find_elements(By.XPATH, '//*[@id="confirm"]')
             if len(elements) >= 1:
-                print('Elemento encontrado')
                 break
             else:
                 print('...Carregando')
@@ -224,8 +224,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         confirmar.click()
         iframes(nav)
     except TimeoutException:
-        print('erro ao aprovar')
-        return
+        print('Erro ao aprovar')
+        return 'Erro ao aprovar'
     time.sleep(1.5)
     
     #Clicando em baixar
@@ -237,10 +237,10 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         data_baixa=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]')))
         data_baixa.click()
         
+        # Carregando até aparecer o campo de DATA
         while True:
             elements = nav.find_elements(By.XPATH, '//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]/input')
             if len(elements) >= 1:
-                print('Elemento encontrado')
                 break
             else:
                 print('...Carregando')
@@ -257,53 +257,66 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         confirmar_baixa=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td')))
         confirmar_baixa.click()
         mensagem_erro = None
+
+        # Carregando até terminar o LOADING após clicar em CONFIRMAR BAIXA 
         while True:
             elements = nav.find_elements(By.XPATH, '/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]/span[2]')
             if len(elements) >= 1:
-                print('Elemento encontrado')
                 break
             else:
                 if len(nav.find_elements(By.XPATH, '//*[@id="confirm"]')) >= 1:
-                    time.sleep(1)
+                    time.sleep(3)
                     mensagem_erro = nav.find_elements(By.CLASS_NAME, 'message_errorToHtml')
-                    print(mensagem_erro[0].text)
+                    texto_erro = mensagem_erro[0].text
                     confirm = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
                     confirm.click()
                     break
-
-                confirmar_baixa.click()
+                try:
+                    confirmar_baixa.click()
+                except StaleElementReferenceException as e:
+                    pass
                 print('...Carregando')
                 time.sleep(1)  # Esperar 1 segundo antes de verificar novamente 
+        # Pegando a mensagem de erro caso o SALDO seja insuficiente
         if mensagem_erro:
             try:
                 print('clicando em fechar aba')
                 fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
                 fechar_aba.click()
                 time.sleep(1)
+                print(texto_erro)
+                return texto_erro
             except TimeoutException:
-                print('erro ao fechar aba')
-                return
-        return
+                print('Erro ao fechar aba')
+                return 'Erro ao fechar aba'
             # Registrar no Google Sheets 
             # Fechar Aba
             # Recomeçar o processo
     except TimeoutException:
-        print('erro ao baixar')
-        return
+        print('Erro ao baixar')
+        return 'Erro ao baixar'
     time.sleep(1.5)
-    
     #Clicando em aprovar
     try:
         print('clicando em gravar')
         nav.switch_to.default_content()
         gravar=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]')))
         gravar.click()
-        time.sleep(10)
+        iframes(nav)
+        # Até aparecer a nova página após clicar em GRAVAR
+        while True:
+            elements = nav.find_elements(By.XPATH, '//*[@id="vars"]/tbody/tr[1]/td[1]/table/tbody/tr[2]/td/table/tbody/tr[5]/td[2]/table/tbody/tr/td[1]/input')
+            if len(elements) >= 1:
+                break
+            else:
+                print('...Carregando')
+                time.sleep(1)  # Esperar 1 segundo antes de verificar novamente
         
     except TimeoutException:
-        print('erro ao gravar')
-        return
+        print('Erro ao gravar')
+        return 'Erro ao gravar'
     time.sleep(1)
+    nav.switch_to.default_content()
     
     #fechar aba
     try:
@@ -313,9 +326,11 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         time.sleep(1)
                 
     except TimeoutException:
-        print('erro ao fechar aba')
-        return
+        print('Erro ao fechar aba')
+        return 'Erro ao fechar aba'
     time.sleep(.5)    
+
+    return 'OK'
     
 # nav.switch_to.default_content()
     
