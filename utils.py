@@ -276,7 +276,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
                 except StaleElementReferenceException as e:
                     pass
                 print('...Carregando')
-                time.sleep(1)  # Esperar 1 segundo antes de verificar novamente 
+                time.sleep(3)  # Esperar 3 segundos antes de verificar novamente 
         # Pegando a mensagem de erro caso o SALDO seja insuficiente
         if mensagem_erro:
             try:
