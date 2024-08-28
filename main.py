@@ -16,7 +16,6 @@ from utils import *
 while True:
 
     try:
-
         # API GOOGLE PLANILHAS
         scope = ['https://www.googleapis.com/auth/spreadsheets',
                     "https://www.googleapis.com/auth/drive"]
@@ -41,9 +40,12 @@ while True:
         tabela_completa = tabela_completa[1:]
         tabela_completa.reset_index(inplace=True)
 
+        tabela_completa = tabela_completa[['index','RECURSO','QUANTIDADE','STATUS']]
+
         tabela_completa['STATUS'] = tabela_completa['STATUS'].fillna('')
 
-        tabela = tabela_completa[tabela_completa['STATUS'] != 'OK']
+        # tabela = tabela_completa[(tabela_completa['STATUS'] != 'OK') & (tabela_completa['RECURSO'] != '')]
+        tabela = tabela_completa[(tabela_completa['STATUS'] != 'OK') & (tabela_completa['STATUS'] != 'NOK') & (tabela_completa['RECURSO'] != '')]
 
         tabela.reset_index(drop=True,inplace=True)
 
@@ -55,7 +57,7 @@ while True:
         print(tabela)
 
         # acessando site
-        link = "https://hcemag.innovaro.com.br/sistema"
+        link = "http://192.168.3.141/"
         nav = webdriver.Chrome()
         nav.maximize_window()
         nav.get(link)
@@ -63,26 +65,30 @@ while True:
         # login e senha
         login(nav)
 
+        time.sleep(5)
         # menu innovaro
         menu_transferencia(nav)
 
         # Conectar com a planilha google
         dep_origem = 'Almox central'
         dep_destino = 'mat fora uso'
-        rec = tabela['CÓDIGO'].to_list() 
+        rec = tabela['RECURSO'].to_list() 
         linha = tabela['index'].to_list() 
-        # ['028844','034953','110012','028844','034953','110012','028844','034953','110012','028844','034953','110012']
 
-        qtd=tabela['DIFERENÇA'].to_list() 
+        qtd=tabela['QUANTIDADE'].to_list() 
 
         for index,recurso in enumerate(rec): 
-            print(f"#### Iniciando Linha {linha[index]+1} ####")
+            print(f"#### Iniciando Linha {linha[index]+1} da aba transferência ####")
             status = transferindo(nav,dep_origem,dep_destino,recurso,qtd[index])
             if status == 'Erro ao clicar no menu':
                 print(status)
                 break
-            print(f"#### Concluindo Linha {linha[index]+1} ####")
-            wks.update('C' + str(linha[index]+1), status)
+            elif status == 'OK':
+                wks.update('C' + str(linha[index]+1), status)
+            else:
+                wks.update('C' + str(linha[index]+1), 'NOK')
+                wks.update('D' + str(linha[index]+1), status)
+            print(f"#### Concluindo Linha {linha[index]+1} da aba transferência ####")
 
     except NoSuchWindowException as e:
         print(f"A janela do navegador foi fechada inesperadamente.")
