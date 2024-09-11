@@ -57,10 +57,19 @@ def processar_requisicoes(rows):
     if not rows:
         return
     
-    chrome_driver_path = verificar_chrome_driver()
     nav = None
 
+    db_path = r'c:\Users\pcp2\sistema-requisicao\requisicao\db.sqlite3'
+    conn = None
+    cursor = None
+
     try:
+
+        chrome_driver_path = verificar_chrome_driver()
+        
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
         # Acessar site
         nav = webdriver.Chrome(chrome_driver_path)
         nav.maximize_window()
