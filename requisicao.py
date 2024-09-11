@@ -1,93 +1,144 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.chrome.options import Options
-from selenium.common.exceptions import NoSuchElementException, NoSuchWindowException
-from oauth2client.service_account import ServiceAccountCredentials
-import gspread
 import time
-
+import sqlite3
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchWindowException
 from utils import *
 
-while True:
+def verificar_requisicoes():
+    db_path = r'c:\Users\pcp2\sistema-requisicao\requisicao\db.sqlite3'
+    
+    try:
+        # Conectar ao banco de dados
+        conn = sqlite3.connect(db_path)
+        cursor = conn.cursor()
+
+        # Executar a consulta com junção
+        query = """
+        SELECT
+            sr.id,
+            sr.classe_requisicao,
+            sr.quantidade,
+            sr.obs,
+            sr.data_solicitacao,
+            cc.codigo AS cc_nome,
+            f.matricula AS funcionario_nome,
+            i.codigo AS item_nome,
+            sr.data_entrega,
+            sr.rpa
+        FROM
+            solicitacao_solicitacaorequisicao sr
+        JOIN
+            cadastro_cc cc ON sr.cc_id = cc.id
+        LEFT JOIN
+            cadastro_funcionario f ON sr.funcionario_id = f.id
+        LEFT JOIN
+            cadastro_itenssolicitacao i ON sr.item_id = i.id
+        WHERE sr.data_entrega IS NOT NULL and (sr.rpa IS NULL OR sr.rpa != 'OK')
+        """
+
+        cursor.execute(query)
+        rows = cursor.fetchall()
+        return rows
+
+    except Exception as e:
+        print(f"Erro ao conectar ao banco de dados ou executar a consulta: {e}")
+        return []
+
+    finally:
+        if cursor:
+            cursor.close()
+        if conn:
+            conn.close()
+
+def processar_requisicoes(rows):
+    if not rows:
+        return
+    
+    chrome_driver_path = verificar_chrome_driver()
+    nav = None
 
     try:
-        scope = ['https://www.googleapis.com/auth/spreadsheets',
-            "https://www.googleapis.com/auth/drive"]
-
-        filename = "service_account_cemag.json"
-        credentials = ServiceAccountCredentials.from_json_keyfile_name(filename, scope)
-        client = gspread.authorize(credentials)
-        sa = gspread.service_account(filename)
-
-        sheet = 'ajuste inventario 2024'
-        worksheet = 'requisicao'
-
-        sh = sa.open(sheet)
-        wks = sh.worksheet(worksheet)
-
-        df = wks.get()
-
-        tabela_completa = pd.DataFrame(df)
-
-        tabela_completa.columns = tabela_completa.iloc[0]
-
-        tabela_completa = tabela_completa[1:]
-
-        tabela_completa.reset_index(inplace=True)
-
-        tabela_completa = tabela_completa[['index','RECURSO','QUANTIDADE','STATUS']]
-
-        tabela_completa['STATUS'] = tabela_completa['STATUS'].fillna('')
-
-        tabela = tabela_completa[(tabela_completa['STATUS'] != 'OK') & (tabela_completa['RECURSO'] != '')]
-
-        tabela.reset_index(drop=True,inplace=True)
-
-        if tabela.empty:
-            print('❌ Sem dados na tabela ❌')
-            time.sleep(20)
-            continue
-
-        print(tabela)
-        
-        # acessando site
-        link = "http://192.168.3.141/"
-        nav = webdriver.Chrome()
+        # Acessar site
+        nav = webdriver.Chrome(chrome_driver_path)
         nav.maximize_window()
-        nav.get(link)
+        # nav.get("https://hcemag.innovaro.com.br/sistema/")
+        nav.get("http://192.168.3.141/sistema")
 
-        # login e senha
+        # Login e navegação
         login(nav)
-
         time.sleep(5)
-        # menu innovaro
         menu_requisicao(nav)
 
-        # Conectar com a planilha google
-        dep_origem = 'Almox central'
-        dep_destino = 'mat fora uso'
-        rec = tabela['RECURSO'].to_list() 
-        linha = tabela['index'].to_list()
+        for row in rows:
+            id_ = row[0]  # ID da linha atual
 
-        qtd=tabela['QUANTIDADE'].to_list()   
+            try:
+                # Processar cada linha
+                rec = row[7]
+                qtd = row[2]
+                tipo_requisicao = row[1]
+                requisitante_matricula = row[6]
+                ccusto_text = row[5]
+                observacao_text = row[3]
 
-        #LER A PLANILHA
+                status = requisitando(nav, rec, qtd, tipo_requisicao, requisitante_matricula, ccusto_text, observacao_text) 
+                
+                # Atualizar o banco de dados
+                if status != 'OK':
+                    query_update = f"""UPDATE solicitacao_solicitacaorequisicao SET rpa = '{status}' WHERE id = {id_}"""
+                    cursor.execute(query_update)
+                    conn.commit()
 
-        for index,recurso in enumerate(rec): 
-            print(f"#### Iniciando Linha {linha[index]+1} da aba requisição ####")
-            status = requisitando(nav,recurso,qtd[index]) 
-            if status != 'OK':
-                print(status)
-                break
-            print(f"#### Concluindo Linha {linha[index]+1} da aba requisição ####")
-            wks.update('C' + str(linha[index]+1), status)
+                    # Fechar aba e continuar
+                    try:
+                        print('Clicando em fechar aba')
+                        time.sleep(2)
+                        fechar_aba = WebDriverWait(nav, 10).until(
+                            EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]'))
+                        )
+                        fechar_aba.click()
+                        time.sleep(1)
+                    except TimeoutException:
+                        print('Erro ao fechar aba')
+                    time.sleep(0.5)
 
-    except NoSuchWindowException as e:
-        print(f"A janela do navegador foi fechada inesperadamente.")
+                    continue  # Segue para a próxima linha se houver erro
+
+                # Atualizar a linha na tabela
+                query_update = f"""UPDATE solicitacao_solicitacaorequisicao SET rpa = '{status}' WHERE id = {id_}"""
+                cursor.execute(query_update)
+                conn.commit()  # Confirma a transação
+
+            except Exception as e:
+                print(f"Erro ao processar a linha ID {id_}: {e}")
+                continue  # Segue para a próxima linha em caso de erro
+
+    except NoSuchWindowException:
+        print("A janela do navegador foi fechada inesperadamente.")
     except Exception as e:
         print(f"Ocorreu um erro inesperado: {e}")
+    finally:
+        if nav:
+            try:
+                nav.quit()
+            except Exception as e:
+                print(f"Erro ao fechar o navegador: {e}")
+
+def main():
+    while True:
+        rows = verificar_requisicoes()
         
+        if rows:
+            print(f"Encontradas {len(rows)} requisições a serem processadas.")
+            processar_requisicoes(rows)
+        else:
+            print("Nenhuma requisição pendente encontrada.")
+
+        # Aguarda um intervalo antes de verificar novamente
+        time.sleep(300)  # Espera 5 minutos
+
+if __name__ == "__main__":
+    main()  

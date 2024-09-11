@@ -10,13 +10,130 @@ from selenium.webdriver.common.keys import Keys
 import time
 import pandas as pd
 import datetime
+import requests
+import zipfile
+import subprocess
+import os
+
+def verificar_chrome_driver():
+    # URL que você deseja acessar
+    url = "https://googlechromelabs.github.io/chrome-for-testing/known-good-versions-with-downloads.json"
+
+    # Faz uma solicitação GET à URL
+    response = requests.get(url)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        # Versão que você está procurando
+        target_version = get_chrome_version()
+
+        def version_key(version):
+            # Converte a versão em uma lista de inteiros para comparação
+            return list(map(int, version.split('.')))
+
+        # Filtra as versões disponíveis
+        versions = [v['version'] for v in data['versions']]
+
+        # Encontra a versão mais próxima
+        closest_version = None
+        min_diff = float('inf')
+
+        for version in versions:
+            # Calcula a diferença em cada nível de versão
+            current_diff = sum(
+                abs(a - b) for a, b in zip(version_key(version), version_key(target_version)))
+
+            if current_diff < min_diff:
+                min_diff = current_diff
+                closest_version = version
+
+        # Filtra as versões disponíveis
+        versions_info = data['versions']
+
+        # Armazena versões que correspondem à versão desejada
+        matching_versions = []
+
+        for version_info in versions_info:
+            version = version_info['version']
+
+            # Verifica se a versão corresponde à versão desejada
+            if version == closest_version:
+                matching_versions.append(version_info)
+
+        # Exibe todos os registros encontrados
+        if matching_versions:
+            print("Registros encontrados:")
+            for match in matching_versions:
+                download_chrome_driver = match['downloads']['chromedriver']
+        else:
+            print("Nenhum registro encontrado.")
+
+        def get_url_by_platform(data, platform):
+            for item in data:
+                if item['platform'] == platform:
+                    return item['url']
+            return None
+
+        # Exemplo de uso:
+        url = get_url_by_platform(download_chrome_driver, 'win32')
+        filename = 'chromedriver-win32.zip'
+        download_file(url, filename)
+
+        extract_to = 'chromedriver_extracted'
+        unzip_file(filename, extract_to)
+
+        chromedriver_path = find_chromedriver(extract_to)
+        if chromedriver_path:
+            print(f"chromedriver.exe encontrado em: {chromedriver_path}")
+        else:
+            print("chromedriver.exe não encontrado.")
+
+        return chromedriver_path
+
+    else:
+        print(f"Falha ao acessar a URL: {response.status_code}")
+
+def download_file(url, filename):
+    response = requests.get(url)
+    if response.status_code == 200:
+        with open(filename, 'wb') as file:
+            file.write(response.content)
+        print(f"Download concluído: {filename}")
+    else:
+        print(f"Falha no download: {response.status_code}")
+
+def unzip_file(zip_path, extract_to='.'):
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        zip_ref.extractall(extract_to)
+        print(f"Arquivos extraídos para: {extract_to}")
+
+def find_chromedriver(extract_to='.'):
+    for root, dirs, files in os.walk(extract_to):
+        if 'chromedriver.exe' in files:
+            return os.path.join(root, 'chromedriver.exe')
+    return None
+
+def get_chrome_version():
+    try:
+        # Executa o comando para obter a versão do Chrome
+        version = subprocess.check_output(
+            ['reg', 'query', r'HKEY_CURRENT_USER\Software\Google\Chrome\BLBeacon',
+                '/v', 'version'],
+            stderr=subprocess.STDOUT
+        )
+        # Processa a saída para extrair a versão
+        version = version.decode().strip().split()[-1]
+        return version
+    except subprocess.CalledProcessError:
+        return "Chrome não está instalado."
 
 def login(nav):
 
     try:
         # logando
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="username"]'))).send_keys("Ti.cemag")
+            (By.XPATH, '//*[@id="username"]'))).send_keys("ti.cemag")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
             (By.XPATH, '//*[@id="password"]'))).send_keys("cem@#1501")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
@@ -27,17 +144,51 @@ def login(nav):
     except Exception as e:
         print(f"Ocorreu um erro durante o login: {e}")
 
+def menu_innovaro_2(nav):
+    
+    """
+    Função para abrir ou fechar menu no innovaro do tipo 2
+    :nav: webdriver
+    """
+    
+    #abrindo menu
+
+    try:
+        nav.switch_to.default_content()
+    except:
+        pass
+
+    WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bt_1898143037"]/table/tbody/tr/td[2]'))).click()
+
+    time.sleep(2)
+
+def menu_innovaro_1(nav):
+    
+    """
+    Função para abrir ou fechar menu no innovaro do tipo 1
+    :nav: webdriver
+    """
+    
+    #abrindo menu
+
+    try:
+        nav.switch_to.default_content()
+    except:
+        pass
+
+    menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
+            (By.CLASS_NAME, 'menuBar-button-label')))
+    time.sleep(2.5)
+    menu.click()
+    time.sleep(2.5)
+
 def menu_transferencia(nav):
     
     nav.switch_to.default_content()
     
     #menu
     try:
-        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label')))
-        time.sleep(2.5)
-        menu.click()
-        time.sleep(2.5)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -60,11 +211,8 @@ def menu_transferencia(nav):
     
     #menu
     try:
-        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label')))
-        time.sleep(2.5)
-        menu.click()
-        time.sleep(2.5)
+        menu_innovaro_1(nav)
+        print('Menu fechado')
     except TimeoutException:
         print('Erro ao clicar no menu')
         return
@@ -76,11 +224,7 @@ def menu_requisicao(nav):
     
     #menu
     try:
-        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label')))
-        time.sleep(2.5)
-        menu.click()
-        time.sleep(2.5)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -103,28 +247,20 @@ def menu_requisicao(nav):
     
     #menu
     try:
-        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label')))
-        time.sleep(2.5)
-        menu.click()
-        time.sleep(2.5)
-        print('Menu aberto')
+        menu_innovaro_1(nav)
+        print('Menu fechado')
     except TimeoutException:
         print('Erro ao clicar no menu')
         return
     time.sleep(.5)
 
-def transferindo(nav,dep_origem,dep_destino,rec,qtd):
+def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         
     nav.switch_to.default_content()
         
     #menu
     try:
-        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label')))
-        time.sleep(2.5)
-        menu.click()
-        time.sleep(2.5)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -277,7 +413,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
         data_baixa_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]/input')))
         data_baixa_input.send_keys(Keys.CONTROL + 'A')
         time.sleep(2)
-        data_baixa_input.send_keys('01/07/2024')
+        data_baixa_input.send_keys(datetime.datetime.now().date().strftime("%d/%m/%Y"))
         data_baixa_input.send_keys(Keys.TAB)
         time.sleep(2)
         
@@ -377,17 +513,13 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd):
 
     return 'OK'
     
-def requisitando(nav,rec,qtd):
+def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,observacao_text):
 
     nav.switch_to.default_content()
   
     #menu
     try:
-        menu=WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.CLASS_NAME, 'menuBar-button-label')))
-        time.sleep(2.5)
-        menu.click()
-        time.sleep(2.5)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -433,7 +565,7 @@ def requisitando(nav,rec,qtd):
         classe_recurso_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td[1]/input')))
         classe_recurso_input.clear()
         time.sleep(2)
-        classe_recurso_input.send_keys('Req p inventário')
+        classe_recurso_input.send_keys(tipo_requisicao)
         classe_recurso_input.send_keys(Keys.TAB)
     except TimeoutException:
         print(f'Erro ao inputar classe de recurso')
@@ -449,7 +581,7 @@ def requisitando(nav,rec,qtd):
         requisitante_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[3]/td[2]/table/tbody/tr/td[1]/input')))
         requisitante_input.clear()
         time.sleep(2)
-        requisitante_input.send_keys('4054')
+        requisitante_input.send_keys(requisitante_matricula)
         requisitante_input.send_keys(Keys.TAB)  
     except TimeoutException:
         print(f'Erro ao inputar Requisitante')
@@ -465,7 +597,7 @@ def requisitando(nav,rec,qtd):
         ccusto_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[3]/td[4]/table/tbody/tr/td[1]/input')))
         ccusto_input.clear()
         time.sleep(2)
-        ccusto_input.send_keys('2000')
+        ccusto_input.send_keys(ccusto_text)
         ccusto_input.send_keys(Keys.TAB)       
     except TimeoutException:
         print(f'erro ao inputar ccusto')
@@ -509,7 +641,7 @@ def requisitando(nav,rec,qtd):
         observacao=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[9]/td[2]/table/tbody/tr/td[1]/textarea')))
         observacao.click()
         observacao.clear()
-        observacao.send_keys('AJUSTE INVENT JUNHO/24')
+        observacao.send_keys(observacao_text)
         observacao.send_keys(Keys.TAB)         
     except TimeoutException:
         print(f'Erro ao inputar quantidade')
@@ -547,12 +679,11 @@ def requisitando(nav,rec,qtd):
     time.sleep(.5)
     
     #Clicando em aprovar
+    # Clicando em aprovar
     try:
-        print('clicando em aprovar')
-        # aprovar=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="buttonsBar_solicitacoes"]/td[1]')))
-        # aprovar.click()
-        
-        button = WebDriverWait(nav, 1).until(
+        print('Clicando em aprovar')
+
+        button = WebDriverWait(nav, 10).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="buttonsBar_grdRequisicoes"]/td[1]'))
         )
 
@@ -561,12 +692,28 @@ def requisitando(nav,rec,qtd):
 
         nav.switch_to.default_content()
 
-        confirmar=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
+        # Esperar pela mensagem de sucesso
+        try:
+            element = WebDriverWait(nav, 10).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(text(), 'Requisição aprovada com sucesso!')]"))
+            )
+            if element:
+                print("Requisição aprovada com sucesso!")
+        except Exception as e:
+            print(f"Erro ao buscar o texto: {e}")
+            return e
+
+        # Clicar no botão de confirmação "Ok"
+        confirmar = WebDriverWait(nav, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="confirm"]'))
+        )
         confirmar.click()
         iframes(nav)
+
     except TimeoutException:
         print('Erro ao aprovar')
         return 'Erro ao aprovar'
+
     time.sleep(1.5)
     
     #Clicando em baixar
@@ -623,7 +770,7 @@ def requisitando(nav,rec,qtd):
             data_movimentacao_input.send_keys(Keys.CONTROL + 'A')
             time.sleep(2)
             # data_movimentacao_input.send_keys(datetime.datetime.now().date().strftime('%d/%m/%Y'))
-            data_movimentacao_input.send_keys('01/07/2024')
+            data_movimentacao_input.send_keys(datetime.datetime.now().date().strftime("%d/%m/%Y"))
             data_movimentacao_input.send_keys(Keys.TAB)
             time.sleep(2)
         except TimeoutException:
@@ -642,39 +789,74 @@ def requisitando(nav,rec,qtd):
         return 'Erro ao baixar'
     time.sleep(1.5)
     
-    #Clicando em gravar
+    # Clicando em gravar
     try:
         print('clicando em gravar')
         nav.switch_to.default_content()
-        gravar=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]')))
+        gravar = WebDriverWait(nav, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td[2]'))
+        )
         gravar.click()
-        time.sleep(2)        
-        confirmar_gravacao=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="answers_0"]')))
+        time.sleep(2)
+
+        confirmar_gravacao = WebDriverWait(nav, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="answers_0"]'))
+        )
         confirmar_gravacao.click()
-        WebDriverWait(nav,60).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
-        fechar_alerta = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
-        fechar_alerta.click()        
+
+        # Tentativa de captura da mensagem de erro, se existir
+        try:
+            error_element = WebDriverWait(nav, 5).until(
+                EC.presence_of_element_located((By.XPATH, "//*[contains(@class, 'message_errorToHtml')]"))
+            )
+            if error_element:
+                error_message = error_element.text
+                print(f"Erro encontrado: {error_message}")
+
+                # Tentar fechar a mensagem de erro
+                try:
+                    print("tentando")
+                    confirm_button = WebDriverWait(nav, 10).until(
+                        EC.element_to_be_clickable((By.XPATH, '//*[@id="confirm"]'))
+                    )
+                    confirm_button.click()
+                    print("Mensagem de erro fechada.")
+                except Exception as e:
+                    print(f"Erro ao tentar fechar a mensagem de erro: {e}")
+
+                return error_message  # Retorna a mensagem de erro e interrompe o processo
+
+        except TimeoutException:
+            print("Nenhuma mensagem de erro encontrada, prosseguindo...")
+            confirm_button = WebDriverWait(nav, 10).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@id="confirm"]'))
+                )
+            confirm_button.click()
+
+        # Prosseguir se não houver erro
+        print("Gravação concluída com sucesso.")
+
     except TimeoutException:
         print('Erro ao gravar')
         return 'Erro ao gravar'
     time.sleep(1)
-    
-    #fechar aba
+
+    # Fechar aba
     try:
         print('clicando em fechar aba')
         time.sleep(2)
-        fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
+        fechar_aba = WebDriverWait(nav, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]'))
+        )
         fechar_aba.click()
-        time.sleep(1)                
+        time.sleep(1)
     except TimeoutException:
         print('Erro ao fechar aba')
         return 'Erro ao fechar aba'
-    time.sleep(.5)    
+    time.sleep(.5)
 
     return 'OK'
         
-# nav.switch_to.default_content()
-    
 def iframes(nav):
     
     iframe_list = nav.find_elements(By.CLASS_NAME, 'tab-frame')
