@@ -7,36 +7,50 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchWindowException
 from utils import *
 
+import psycopg2
+from psycopg2.extras import DictCursor  # Para retornar resultados como dicionários
+
+
 def verificar_requisicoes():
-    db_path = r'c:\Users\pcp2\sistema-requisicao\requisicao\db.sqlite3'
     
     try:
-        # Conectar ao banco de dados
-        conn = sqlite3.connect(db_path)
-        cursor = conn.cursor()
+        # Conectar ao banco de dados PostgreSQL
+        conn = psycopg2.connect(
+            dbname='postgres',  
+            user='postgres',      
+            password='15512332',    
+            host='database-2.cdcogkfzajf0.us-east-1.rds.amazonaws.com',        
+            port='5432'              
+        )
+
+        cursor = conn.cursor(cursor_factory=DictCursor)  # Usa DictCursor para obter resultados como dicionários
 
         # Executar a consulta com junção
         query = """
-        SELECT
-            sr.id,
-            sr.classe_requisicao,
-            sr.quantidade,
-            sr.obs,
-            sr.data_solicitacao,
-            cc.codigo AS cc_nome,
-            f.matricula AS funcionario_nome,
-            i.codigo AS item_nome,
-            sr.data_entrega,
-            sr.rpa
-        FROM
-            solicitacao_solicitacaorequisicao sr
-        JOIN
-            cadastro_cc cc ON sr.cc_id = cc.id
-        LEFT JOIN
-            cadastro_funcionario f ON sr.funcionario_id = f.id
-        LEFT JOIN
-            cadastro_itenssolicitacao i ON sr.item_id = i.id
-        WHERE sr.data_entrega IS NOT NULL and (sr.rpa IS NULL OR sr.rpa != 'OK')
+            SELECT
+                sr.id,
+                sr.quantidade,
+                sr.obs,
+                sr.data_solicitacao,
+                cac.nome as classe_requisicao,
+                cc1.codigo AS cc_nome,
+                f.matricula AS funcionario_nome,
+                i.codigo AS item_nome,
+                sr.data_entrega,
+                sr.rpa
+            FROM
+                almoxarifado_v2.solicitacao_solicitacaorequisicao sr
+            JOIN
+                almoxarifado_v2.cadastro_cc cc1 ON sr.cc_id = cc1.id
+            LEFT JOIN
+                almoxarifado_v2.cadastro_classerequisicao cac ON sr.classe_requisicao_id = cac.id    
+            LEFT JOIN
+                almoxarifado_v2.cadastro_funcionario f ON sr.funcionario_id = f.id
+            LEFT JOIN
+                almoxarifado_v2.cadastro_itenssolicitacao i ON sr.item_id = i.id
+            WHERE
+                sr.data_entrega IS NOT NULL 
+                AND (sr.rpa IS NULL OR sr.rpa != 'OK');
         """
 
         cursor.execute(query)
@@ -57,26 +71,31 @@ def processar_requisicoes(rows):
     if not rows:
         return
     
-    nav = None
-
-    db_path = r'c:\Users\pcp2\sistema-requisicao\requisicao\db.sqlite3'
     conn = None
     cursor = None
 
     try:
 
-        chrome_driver_path = verificar_chrome_driver()
-        
-        conn = sqlite3.connect(db_path)
+        # Conectar ao banco PostgreSQL
+        conn = psycopg2.connect(
+            dbname='postgres',  
+            user='postgres',      
+            password='15512332',    
+            host='database-2.cdcogkfzajf0.us-east-1.rds.amazonaws.com',        
+            port='5432'              
+        )
+
+
         cursor = conn.cursor()
 
-        # Acessar site
+        # Configuração do Selenium e navegação
+        chrome_driver_path = verificar_chrome_driver()
         nav = webdriver.Chrome(chrome_driver_path)
         nav.maximize_window()
         # nav.get("https://hcemag.innovaro.com.br/sistema/")
-        nav.get("http://192.168.3.141/sistema")
+        nav.get("http://192.168.3.141/")
 
-        # Login e navegação
+        # Login e navegação no sistema
         login(nav)
         time.sleep(5)
         menu_requisicao(nav)
@@ -87,17 +106,17 @@ def processar_requisicoes(rows):
             try:
                 # Processar cada linha
                 rec = row[7]
-                qtd = row[2]
-                tipo_requisicao = row[1]
+                qtd = row[1]
+                tipo_requisicao = row[4]
                 requisitante_matricula = row[6]
                 ccusto_text = row[5]
-                observacao_text = row[3]
+                observacao_text = row[2]
 
                 status = requisitando(nav, rec, qtd, tipo_requisicao, requisitante_matricula, ccusto_text, observacao_text) 
                 
                 # Atualizar o banco de dados
                 if status != 'OK':
-                    query_update = f"""UPDATE solicitacao_solicitacaorequisicao SET rpa = '{status}' WHERE id = {id_}"""
+                    query_update = f"""UPDATE almoxarifado_v2.solicitacao_solicitacaorequisicao SET rpa = '{status}' WHERE id = {id_}"""
                     cursor.execute(query_update)
                     conn.commit()
 
@@ -117,7 +136,7 @@ def processar_requisicoes(rows):
                     continue  # Segue para a próxima linha se houver erro
 
                 # Atualizar a linha na tabela
-                query_update = f"""UPDATE solicitacao_solicitacaorequisicao SET rpa = '{status}' WHERE id = {id_}"""
+                query_update = f"""UPDATE almoxarifado_v2.solicitacao_solicitacaorequisicao SET rpa = '{status}' WHERE id = {id_}"""
                 cursor.execute(query_update)
                 conn.commit()  # Confirma a transação
 

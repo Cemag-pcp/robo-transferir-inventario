@@ -133,9 +133,9 @@ def login(nav):
     try:
         # logando
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="username"]'))).send_keys("ti.cemag")
+            (By.XPATH, '//*[@id="username"]'))).send_keys("user_almox")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="password"]'))).send_keys("cem@#1501")
+            (By.XPATH, '//*[@id="password"]'))).send_keys("samuel05")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
             (By.XPATH, '//*[@id="password"]'))).send_keys(Keys.ENTER)
 
@@ -188,7 +188,7 @@ def menu_transferencia(nav):
     
     #menu
     try:
-        menu_innovaro_1(nav)
+        menu_innovaro_2(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -211,7 +211,7 @@ def menu_transferencia(nav):
     
     #menu
     try:
-        menu_innovaro_1(nav)
+        menu_innovaro_2(nav)
         print('Menu fechado')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -224,7 +224,7 @@ def menu_requisicao(nav):
     
     #menu
     try:
-        menu_innovaro_1(nav)
+        menu_innovaro_2(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -247,7 +247,7 @@ def menu_requisicao(nav):
     
     #menu
     try:
-        menu_innovaro_1(nav)
+        menu_innovaro_2(nav)
         print('Menu fechado')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -260,7 +260,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         
     #menu
     try:
-        menu_innovaro_1(nav)
+        menu_innovaro_2(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -519,7 +519,7 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
   
     #menu
     try:
-        menu_innovaro_1(nav)
+        menu_innovaro_2(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
