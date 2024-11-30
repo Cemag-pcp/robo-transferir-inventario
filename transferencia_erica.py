@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchWindowException
 
-from utils_temp import *
+from utils import *
 
 import psycopg2
 from psycopg2.extras import DictCursor  # Para retornar resultados como dicionários
@@ -44,7 +44,7 @@ def verificar_transferencias():
             almoxarifado_v2.cadastro_itenstransferencia i ON st.item_id = i.id
         LEFT JOIN
             almoxarifado_v2.cadastro_depositodestino d ON st.deposito_destino_id = d.id
-        WHERE st.data_entrega IS NOT NULL AND (st.rpa IS NULL OR st.rpa != 'OK') and NOT (obs = 'Almox Corte e Estamparia' or obs = 'Almox Usinagem' or obs = 'Almox Serra')
+        WHERE st.data_entrega IS NOT NULL AND (st.rpa IS NULL OR st.rpa != 'OK') and (obs = 'Almox Corte e Estamparia' or obs = 'Almox Usinagem' or obs = 'Almox Serra')
         """
 
         cursor.execute(query)
@@ -104,8 +104,9 @@ def processar_transferencias(rows):
                 qtd = row[1]
                 observacao_text = row[8]
                 dep_destino = row[6]
+                dep_origem = row[2]
 
-                status = transferindo(nav, 'almox central',dep_destino , rec, qtd, observacao_text)
+                status = transferindo(nav, dep_origem,dep_destino , rec, qtd, observacao_text)
 
                 # Atualizando o status no banco
                 query_update = """UPDATE almoxarifado_v2.solicitacao_solicitacaotransferencia 

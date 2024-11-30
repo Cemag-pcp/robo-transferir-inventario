@@ -5,10 +5,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchWindowException
-from utils import *
+from utils_temp import *
 
 import psycopg2
 from psycopg2.extras import DictCursor  # Para retornar resultados como dicionários
+
+import sys
+sys.path.append(r'C:\Users\TI DEV\transferencia_automatica\robo-transferir-inventario')
 
 
 def verificar_requisicoes():
@@ -89,8 +92,12 @@ def processar_requisicoes(rows):
         cursor = conn.cursor()
 
         # Configuração do Selenium e navegação
-        chrome_driver_path = verificar_chrome_driver()
-        nav = webdriver.Chrome(chrome_driver_path)
+        try:
+            nav = webdriver.Chrome()
+        except:
+            chrome_driver_path = verificar_chrome_driver()
+            nav = webdriver.Chrome(chrome_driver_path)
+
         nav.maximize_window()
         # nav.get("https://hcemag.innovaro.com.br/sistema/")
         nav.get("http://192.168.3.141/")
@@ -110,8 +117,11 @@ def processar_requisicoes(rows):
                 tipo_requisicao = row[4]
                 requisitante_matricula = row[6]
                 ccusto_text = row[5]
-                observacao_text = row[2]
-
+                if not row[2]:
+                    observacao_text = ' '
+                else:
+                    observacao_text = row[2]
+    
                 status = requisitando(nav, rec, qtd, tipo_requisicao, requisitante_matricula, ccusto_text, observacao_text) 
                 
                 # Atualizar o banco de dados
