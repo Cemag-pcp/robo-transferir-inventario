@@ -6,7 +6,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchWindowException
 
-from utils_temp import *
+from utils import *
 
 import psycopg2
 from psycopg2.extras import DictCursor  # Para retornar resultados como dicionários
@@ -44,7 +44,7 @@ def verificar_transferencias():
             almoxarifado_v2.cadastro_itenstransferencia i ON st.item_id = i.id
         LEFT JOIN
             almoxarifado_v2.cadastro_depositodestino d ON st.deposito_destino_id = d.id
-        WHERE st.data_entrega IS NOT NULL AND (st.rpa IS NULL OR st.rpa != 'OK') and NOT (obs = 'Almox Corte e Estamparia' or obs = 'Almox Usinagem' or obs = 'Almox Serra')
+        WHERE st.data_entrega IS NOT NULL AND (st.rpa IS NULL OR st.rpa != 'OK')
         """
 
         cursor.execute(query)
@@ -68,6 +68,8 @@ def processar_transferencias(rows):
     conn = None
     cursor = None
 
+    # row = rows[1]
+
     try:
         # Conectar ao banco PostgreSQL
         conn = psycopg2.connect(
@@ -89,7 +91,9 @@ def processar_transferencias(rows):
         
         nav.maximize_window()
         # nav.get("https://hcemag.innovaro.com.br/sistema/")
-        nav.get("http://192.168.3.141/")
+        # nav.get("http://192.168.3.141/")
+        # nav.get("http://192.168.3.140/")
+        nav.get("http://127.0.0.1/sistema")
 
         # Login e navegação no sistema
         login(nav)
@@ -117,12 +121,8 @@ def processar_transferencias(rows):
                 try:
                     print('Clicando em fechar aba')
                     time.sleep(2)
-                    fechar_aba = WebDriverWait(nav, 10).until(
-                        EC.element_to_be_clickable(
-                            (By.XPATH, '/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')
-                        )
-                    )
-                    fechar_aba.click()
+                    WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+                        By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
                     time.sleep(1)
                 except TimeoutException:
                     print('Erro ao fechar aba')

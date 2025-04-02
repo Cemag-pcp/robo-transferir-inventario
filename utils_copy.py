@@ -133,9 +133,9 @@ def login(nav):
     try:
         # logando
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="username"]'))).send_keys("assistente almoxarifado")
+            (By.XPATH, '//*[@id="username"]'))).send_keys("luan araujo")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="password"]'))).send_keys("Cem#@1571")
+            (By.XPATH, '//*[@id="password"]'))).send_keys("luanaraujo7")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
             (By.XPATH, '//*[@id="password"]'))).send_keys(Keys.ENTER)
 
@@ -413,7 +413,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         data_baixa_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]/input')))
         data_baixa_input.send_keys(Keys.CONTROL + 'A')
         time.sleep(2)
-        data_baixa_input.send_keys(datetime.datetime.now().date().strftime("%d/%m/%Y"))
+        data_baixa_input.send_keys()
         data_baixa_input.send_keys(Keys.TAB)
         time.sleep(2)
         
@@ -446,8 +446,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         if mensagem_erro:
             try:
                 print('clicando em fechar aba')
-                fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
-                fechar_aba.click()
+                WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+                    By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
                 time.sleep(1)
                 print(texto_erro)
                 return texto_erro
@@ -484,8 +484,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         if mensagem_erro:
             try:
                 print('clicando em fechar aba')
-                fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
-                fechar_aba.click()
+                WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+                    By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
                 time.sleep(1)
                 print(texto_erro)
                 return texto_erro
@@ -502,8 +502,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
     #fechar aba
     try:
         print('clicando em fechar aba')
-        fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
-        fechar_aba.click()
+        WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+            By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
         time.sleep(1)
                 
     except TimeoutException:
@@ -513,7 +513,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
 
     return 'OK'
     
-def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,observacao_text):
+def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text):
 
     nav.switch_to.default_content()
   
@@ -565,7 +565,7 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
         classe_recurso_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td[1]/input')))
         classe_recurso_input.clear()
         time.sleep(2)
-        classe_recurso_input.send_keys(tipo_requisicao)
+        classe_recurso_input.send_keys('Req p inventário')
         classe_recurso_input.send_keys(Keys.TAB)
     except TimeoutException:
         print(f'Erro ao inputar classe de recurso')
@@ -630,19 +630,6 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
         quantidade_input.clear()
         quantidade_input.send_keys(qtd)
         quantidade_input.send_keys(Keys.TAB)       
-    except TimeoutException:
-        print(f'Erro ao inputar quantidade')
-        return 'Erro ao inputar quantidade'
-    time.sleep(.5)
-
-    #inputando quantidade
-    try:
-        print('inputando Observação')
-        observacao=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[9]/td[2]/table/tbody/tr/td[1]/textarea')))
-        observacao.click()
-        observacao.clear()
-        observacao.send_keys(observacao_text)
-        observacao.send_keys(Keys.TAB)         
     except TimeoutException:
         print(f'Erro ao inputar quantidade')
         return 'Erro ao inputar quantidade'
@@ -770,7 +757,7 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
             data_movimentacao_input.send_keys(Keys.CONTROL + 'A')
             time.sleep(2)
             # data_movimentacao_input.send_keys(datetime.datetime.now().date().strftime('%d/%m/%Y'))
-            data_movimentacao_input.send_keys(datetime.datetime.now().date().strftime("%d/%m/%Y"))
+            data_movimentacao_input.send_keys('03/12/2024')
             data_movimentacao_input.send_keys(Keys.TAB)
             time.sleep(2)
         except TimeoutException:
@@ -845,10 +832,8 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
     try:
         print('clicando em fechar aba')
         time.sleep(2)
-        fechar_aba = WebDriverWait(nav, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]'))
-        )
-        fechar_aba.click()
+        WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+            By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
         time.sleep(1)
     except TimeoutException:
         print('Erro ao fechar aba')

@@ -432,10 +432,14 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
                 if len(nav.find_elements(By.XPATH, '//*[@id="confirm"]')) >= 1:
                     time.sleep(3)
                     mensagem_erro = nav.find_elements(By.CLASS_NAME, 'message_errorToHtml')
-                    texto_erro = mensagem_erro[0].text
-                    confirm = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
-                    confirm.click()
-                    break
+                    mensagem_erro_2 = nav.find_element(By.XPATH, '//*[@id="alertMessageBox"]')
+                    
+                    if mensagem_erro or mensagem_erro_2:
+                        texto_erro = mensagem_erro[0].text if mensagem_erro else mensagem_erro_2.text
+                        confirm = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
+                        confirm.click()
+                        break
+
                 try:
                     confirmar_baixa.click()
                 except StaleElementReferenceException as e:
@@ -446,8 +450,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         if mensagem_erro:
             try:
                 print('clicando em fechar aba')
-                fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
-                fechar_aba.click()
+                WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+                    By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
                 time.sleep(1)
                 print(texto_erro)
                 return texto_erro
@@ -484,8 +488,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         if mensagem_erro:
             try:
                 print('clicando em fechar aba')
-                fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
-                fechar_aba.click()
+                WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+                    By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
                 time.sleep(1)
                 print(texto_erro)
                 return texto_erro
@@ -502,8 +506,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
     #fechar aba
     try:
         print('clicando em fechar aba')
-        fechar_aba=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]')))
-        fechar_aba.click()
+        WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+            By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
         time.sleep(1)
                 
     except TimeoutException:
@@ -845,10 +849,8 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
     try:
         print('clicando em fechar aba')
         time.sleep(2)
-        fechar_aba = WebDriverWait(nav, 10).until(
-            EC.element_to_be_clickable((By.XPATH, '/html/body/div[3]/div/table/tbody/tr/td[1]/table/tbody/tr/td[4]'))
-        )
-        fechar_aba.click()
+        WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+            By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
         time.sleep(1)
     except TimeoutException:
         print('Erro ao fechar aba')
