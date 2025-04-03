@@ -94,6 +94,7 @@ def processar_transferencias(rows):
         # nav.get("http://192.168.3.141/")
         # nav.get("http://192.168.3.140/")
         nav.get("http://127.0.0.1/sistema")
+        # nav.get("https://hcemag.innovaro.com.br/sistema") # base de teste
 
         # Login e navegação no sistema
         login(nav)

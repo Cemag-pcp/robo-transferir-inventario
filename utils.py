@@ -158,7 +158,8 @@ def menu_innovaro_2(nav):
     except:
         pass
 
-    WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bt_1898143037"]/table/tbody/tr/td[2]'))).click()
+    WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bt_1898143037"]/table/tbody/tr/td[2]'))).click() #original
+    # WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bt_1892603865"]/table/tbody/tr/td[2]'))).click()
 
     time.sleep(2)
 
@@ -422,6 +423,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         confirmar_baixa=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td')))
         confirmar_baixa.click()
         mensagem_erro = None
+        mensagem_erro_2 = None
 
         # Carregando até terminar o LOADING após clicar em CONFIRMAR BAIXA 
         while True:
@@ -433,7 +435,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
                     time.sleep(3)
                     mensagem_erro = nav.find_elements(By.CLASS_NAME, 'message_errorToHtml')
                     mensagem_erro_2 = nav.find_element(By.XPATH, '//*[@id="alertMessageBox"]')
-                    
+                    # print(mensagem_erro_2)
                     if mensagem_erro or mensagem_erro_2:
                         texto_erro = mensagem_erro[0].text if mensagem_erro else mensagem_erro_2.text
                         confirm = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
@@ -447,10 +449,10 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
                 print('...Carregando')
                 time.sleep(3)  # Esperar 3 segundos antes de verificar novamente 
         # Pegando a mensagem de erro caso o SALDO seja insuficiente
-        if mensagem_erro:
+        if mensagem_erro or mensagem_erro_2:
             try:
                 print('clicando em fechar aba')
-                WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
+                WebDriverWait(nav, 2).until(EC.element_to_be_clickable((
                     By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
                 time.sleep(1)
                 print(texto_erro)
@@ -464,7 +466,8 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         print('Erro ao baixar')
         return 'Erro ao baixar'
     time.sleep(1.5)
-    #Clicando em aprovar
+    
+    #Clicando em gravar
     try:
         print('clicando em gravar')
         nav.switch_to.default_content()
@@ -476,6 +479,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
             WebDriverWait(nav,15).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
         except:
             print("Sem nenhum erro contábil")
+
         if len(nav.find_elements(By.XPATH, '//*[@id="confirm"]')) >= 1:
             print("Erro, clicando em confirmar")
             mensagem_erro = nav.find_elements(By.CLASS_NAME, 'message_errorToHtml')

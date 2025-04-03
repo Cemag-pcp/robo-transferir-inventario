@@ -14,7 +14,6 @@ from utils import *
 
 
 while True:
-
     try:
         # API GOOGLE PLANILHAS
         scope = ['https://www.googleapis.com/auth/spreadsheets',
@@ -60,6 +59,7 @@ while True:
         # link = "http://192.168.3.141/"
         # link = "http://192.168.3.140/"
         link = "http://127.0.0.1/sistema" # base de produção
+        
 
         nav = webdriver.Chrome()
         nav.maximize_window()
@@ -67,6 +67,7 @@ while True:
 
         # login e senha
         login(nav)
+
 
         time.sleep(5)
         # menu innovaro
