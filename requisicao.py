@@ -53,7 +53,9 @@ def verificar_requisicoes():
                 almoxarifado_v2.cadastro_itenssolicitacao i ON sr.item_id = i.id
             WHERE
                 sr.data_entrega IS NOT NULL 
-                AND (sr.rpa IS NULL OR sr.rpa != 'OK');
+                AND (sr.rpa IS NULL OR sr.rpa != 'OK')
+            order by 
+            	sr.data_solicitacao;
         """
 
         cursor.execute(query)
