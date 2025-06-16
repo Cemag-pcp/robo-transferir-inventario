@@ -133,9 +133,9 @@ def login(nav):
     try:
         # logando
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="username"]'))).send_keys("user_almox")
+            (By.XPATH, '//*[@id="username"]'))).send_keys("user_almox") # 
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="password"]'))).send_keys("samuel05")
+            (By.XPATH, '//*[@id="password"]'))).send_keys("samuel05") # 
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
             (By.XPATH, '//*[@id="password"]'))).send_keys(Keys.ENTER)
 

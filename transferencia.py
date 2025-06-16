@@ -105,10 +105,10 @@ def processar_transferencias(rows):
             id_ = row[0]  # ID da linha atual
 
             try:
-                rec = row[5]
-                qtd = row[1]
-                observacao_text = row[8]
-                dep_destino = row[6]
+                rec = row[5] # recurso
+                qtd = row[1] # quantidade
+                observacao_text = row[8] # obs
+                dep_destino = row[6] # deposito destino
 
                 status = transferindo(nav, 'almox central',dep_destino , rec, qtd, observacao_text)
 
