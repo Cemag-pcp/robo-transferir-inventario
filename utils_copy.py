@@ -133,9 +133,9 @@ def login(nav):
     try:
         # logando
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="username"]'))).send_keys("user_almox") # 
+            (By.XPATH, '//*[@id="username"]'))).send_keys("luan araujo")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
-            (By.XPATH, '//*[@id="password"]'))).send_keys("samuel05") # 
+            (By.XPATH, '//*[@id="password"]'))).send_keys("luanaraujo7")
         WebDriverWait(nav, 10).until(EC.element_to_be_clickable(
             (By.XPATH, '//*[@id="password"]'))).send_keys(Keys.ENTER)
 
@@ -158,8 +158,7 @@ def menu_innovaro_2(nav):
     except:
         pass
 
-    WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bt_1898143037"]/table/tbody/tr/td[2]'))).click() #original
-    # WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bt_1892603865"]/table/tbody/tr/td[2]'))).click()
+    WebDriverWait(nav, 10).until(EC.element_to_be_clickable((By.XPATH, '//*[@id="bt_1898143037"]/table/tbody/tr/td[2]'))).click()
 
     time.sleep(2)
 
@@ -189,7 +188,7 @@ def menu_transferencia(nav):
     
     #menu
     try:
-        menu_innovaro_2(nav)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -212,7 +211,7 @@ def menu_transferencia(nav):
     
     #menu
     try:
-        menu_innovaro_2(nav)
+        menu_innovaro_1(nav)
         print('Menu fechado')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -225,7 +224,7 @@ def menu_requisicao(nav):
     
     #menu
     try:
-        menu_innovaro_2(nav)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -248,7 +247,7 @@ def menu_requisicao(nav):
     
     #menu
     try:
-        menu_innovaro_2(nav)
+        menu_innovaro_1(nav)
         print('Menu fechado')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -261,7 +260,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         
     #menu
     try:
-        menu_innovaro_2(nav)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -414,7 +413,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         data_baixa_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="informaçõesDaBaixa"]/tbody/tr[1]/td[1]/table/tbody/tr/td/table/tbody/tr/td[2]/table/tbody/tr/td[1]/input')))
         data_baixa_input.send_keys(Keys.CONTROL + 'A')
         time.sleep(2)
-        data_baixa_input.send_keys(datetime.datetime.now().date().strftime("%d/%m/%Y"))
+        data_baixa_input.send_keys()
         data_baixa_input.send_keys(Keys.TAB)
         time.sleep(2)
         
@@ -423,7 +422,6 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         confirmar_baixa=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'/html/body/div[4]/div/div[1]/table/tbody/tr/td[2]/table/tbody/tr/td')))
         confirmar_baixa.click()
         mensagem_erro = None
-        mensagem_erro_2 = None
 
         # Carregando até terminar o LOADING após clicar em CONFIRMAR BAIXA 
         while True:
@@ -434,14 +432,10 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
                 if len(nav.find_elements(By.XPATH, '//*[@id="confirm"]')) >= 1:
                     time.sleep(3)
                     mensagem_erro = nav.find_elements(By.CLASS_NAME, 'message_errorToHtml')
-                    mensagem_erro_2 = nav.find_element(By.XPATH, '//*[@id="alertMessageBox"]')
-                    # print(mensagem_erro_2)
-                    if mensagem_erro or mensagem_erro_2:
-                        texto_erro = mensagem_erro[0].text if mensagem_erro else mensagem_erro_2.text
-                        confirm = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
-                        confirm.click()
-                        break
-
+                    texto_erro = mensagem_erro[0].text
+                    confirm = WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
+                    confirm.click()
+                    break
                 try:
                     confirmar_baixa.click()
                 except StaleElementReferenceException as e:
@@ -449,10 +443,10 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
                 print('...Carregando')
                 time.sleep(3)  # Esperar 3 segundos antes de verificar novamente 
         # Pegando a mensagem de erro caso o SALDO seja insuficiente
-        if mensagem_erro or mensagem_erro_2:
+        if mensagem_erro:
             try:
                 print('clicando em fechar aba')
-                WebDriverWait(nav, 2).until(EC.element_to_be_clickable((
+                WebDriverWait(nav, 1).until(EC.element_to_be_clickable((
                     By.XPATH, "//span[contains(@onclick, 'Environment.getInstance().closeTab')]/div"))).click()
                 time.sleep(1)
                 print(texto_erro)
@@ -466,8 +460,7 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
         print('Erro ao baixar')
         return 'Erro ao baixar'
     time.sleep(1.5)
-    
-    #Clicando em gravar
+    #Clicando em aprovar
     try:
         print('clicando em gravar')
         nav.switch_to.default_content()
@@ -479,7 +472,6 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
             WebDriverWait(nav,15).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="confirm"]')))
         except:
             print("Sem nenhum erro contábil")
-
         if len(nav.find_elements(By.XPATH, '//*[@id="confirm"]')) >= 1:
             print("Erro, clicando em confirmar")
             mensagem_erro = nav.find_elements(By.CLASS_NAME, 'message_errorToHtml')
@@ -521,13 +513,13 @@ def transferindo(nav,dep_origem,dep_destino,rec,qtd,observacao_text):
 
     return 'OK'
     
-def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,observacao_text):
+def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text):
 
     nav.switch_to.default_content()
   
     #menu
     try:
-        menu_innovaro_2(nav)
+        menu_innovaro_1(nav)
         print('Menu aberto')
     except TimeoutException:
         print('Erro ao clicar no menu')
@@ -573,7 +565,7 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
         classe_recurso_input=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[1]/td[4]/table/tbody/tr/td[1]/input')))
         classe_recurso_input.clear()
         time.sleep(2)
-        classe_recurso_input.send_keys(tipo_requisicao)
+        classe_recurso_input.send_keys('Req p inventário')
         classe_recurso_input.send_keys(Keys.TAB)
     except TimeoutException:
         print(f'Erro ao inputar classe de recurso')
@@ -638,19 +630,6 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
         quantidade_input.clear()
         quantidade_input.send_keys(qtd)
         quantidade_input.send_keys(Keys.TAB)       
-    except TimeoutException:
-        print(f'Erro ao inputar quantidade')
-        return 'Erro ao inputar quantidade'
-    time.sleep(.5)
-
-    #inputando quantidade
-    try:
-        print('inputando Observação')
-        observacao=WebDriverWait(nav,10).until(EC.element_to_be_clickable((By.XPATH,'//*[@id="grdRequisicoes"]/tbody/tr[1]/td[1]/table/tbody/tr[1]/td/table/tbody/tr[9]/td[2]/table/tbody/tr/td[1]/textarea')))
-        observacao.click()
-        observacao.clear()
-        observacao.send_keys(observacao_text)
-        observacao.send_keys(Keys.TAB)         
     except TimeoutException:
         print(f'Erro ao inputar quantidade')
         return 'Erro ao inputar quantidade'
@@ -778,7 +757,7 @@ def requisitando(nav,rec,qtd,tipo_requisicao,requisitante_matricula,ccusto_text,
             data_movimentacao_input.send_keys(Keys.CONTROL + 'A')
             time.sleep(2)
             # data_movimentacao_input.send_keys(datetime.datetime.now().date().strftime('%d/%m/%Y'))
-            data_movimentacao_input.send_keys(datetime.datetime.now().date().strftime("%d/%m/%Y"))
+            data_movimentacao_input.send_keys('03/12/2024')
             data_movimentacao_input.send_keys(Keys.TAB)
             time.sleep(2)
         except TimeoutException:

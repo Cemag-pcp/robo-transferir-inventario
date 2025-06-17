@@ -1,0 +1,186 @@
+classe,codigo,descricao,qtd,status
+Req p inventário,509001,BROCA DE WIDIA 9/16 14MM (Un),"-1,00",OK
+Req p inventário,222145,CAIXA DE TRANSMISSÃO INPEL CT14501,"-2,00",OK
+Req p inventário,533890HYP,CAPA RETENTORA 80/130A REF.: 220756 HYPERTHERM (Un),"-1,00",OK
+Req p inventário,222146,LIMITADOR DE TORQUE INPEL LT9003,"-2,00",OK
+Req p inventário,222109,FILTRO DE PRESSAO PLF PARA 60 LITROS 10um (Un),"-4,00",OK
+Req p inventário,268410,PNEU RODOV. 650 X16 CT52 6 Pr,"-1,00",OK
+Req p inventário,201224,"DISCO GRADE CONCAVO LISO 24,00R 6,00MM 1F #42,86 (Un)","-5,00",OK
+Req p inventário,647433,SERRA EM FITA PB,"-10,00",OK
+Req p inventário,533888HYP,DISTRIBUIDOR DE GÁS 30/45A (HYP220180) (Un),"-2,00",OK
+Req p inventário,646404,LAMINA DE SERRA 1 X 12 (Un),"-1,00",OK
+Req p inventário,641870,BROCA CONICA 33/64 DIN 345 (Un),"-3,00",OK
+Req p inventário,641728,BROCA CONICA 13/32 DIN 345 (Un),"-2,00",OK
+Req p inventário,645102,MACHO MANUAL OSG 1/4 UNF 100B DIN351 (Un),"-8,00",OK
+Req p inventário,318723,TINTA P/SERIGRAFIA SINT. BRANCO (L),"-2,60",OK
+Req p inventário,238406,MOLA,"-5,00",OK
+Req p inventário,645369,MACHO OSG 1/4 UNC 100C DIN351 (Un),"-4,00",OK
+Req p inventário,509265,FILTRO CARTÃO PLINSADO 1250 X 1270MM 32 PLINSAS (Un),"-9,00",OK
+Req p inventário,645760,MACHO 1/2 UNC DIN2183,"-1,00",OK
+Req p inventário,645725,MACHO MANUAL 3/16 UNF 32F (Un),"-2,00",OK
+Req p inventário,649044,INS INT 16 IR 6 STACME TT7010 (Un),"-5,00",OK
+Req p inventário,645302,MACHO 1/2 UNF 100,"-1,00",OK
+Req p inventário,534231HYP,SILICONE LUBRIFICANTE O'RING REF.: 027055 HYPERTHERM (Un),"-1,00",OK
+Req p inventário,200047,"DISCO GRADE CONCAVO LISO 14,00L 3,00MM 1F #26,98 (Un)","-3,00",OK
+Req p inventário,641716,BROCA CONICA 1/2 DIN 345 (Un),"-2,00",OK
+Req p inventário,533883HYP,BOCAL DE PROTEÇÃO 80A REF.: 220189 HYPERTHERM (Un),"-5,00",OK
+Req p inventário,398057,KIT ADESIVO ROCADEIRA ROCAX1800 (Un),"-1,00",OK
+Req p inventário,500460,martelo de borracha 80mm,"-1,00",OK
+Req p inventário,500608,ADESIVO REMENDO KG (Un),"-1,00",OK
+Req p inventário,313210,CATALISADOR PU 1/1 5058 COMP B (L),"-48,21",OK
+Req p inventário,398036,KIT ADESIVO FORRAGEIRA CBH6R (Un),"-1,00",OK
+Req p inventário,398041,KIT ADESIVO CAFEEIRA CBHM5000 (Un),"-13,00",OK
+Req p inventário,398050,KIT ADESIVO FORRAGEIRA CBH9,"-1,00",OK
+Req p inventário,240234,MANG A/P SAE,"-2,00",OK
+Req p inventário,645008,MACHO OSG 5/16 UNF 100B DIN351 (Un),"-3,00",OK
+Req p inventário,350107,ARAME MIG P/ SOLDA INOX,"-15,00",OK
+Req p inventário,643427,INSERTO PASTILHA ROSCA EXT RT16.01W,"-9,00",OK
+Req p inventário,716032,"PAPEL A4 ETIQUETA A4375 C/ 100FL 32,83MM X 104,5MM (Un)","-1,00",OK
+Req p inventário,398054,KIT ADESIVO BASICA FA6F METALICA (Un),"-1,00",OK
+Req p inventário,650094,PASTILHA TNMG 16.04.04 ER,"-20,00",OK
+Req p inventário,641310,BROCA AR 7/32 LONGA DIN340 (Un),"-4,00",OK
+Req p inventário,534461,BICO DUPLO 3.5MM ROYTOOLS CÓD WELLE 9286 (Un),"-1,00",OK
+Req p inventário,509109,BICO DE CORTE GLP 1503 N.06 (Un),"-7,00",OK
+Req p inventário,534567,BICO HIGH SPEED 1.4 ESPECIAL DUPLO JFY (Un),"-1,00",OK
+Req p inventário,647495,SERRA P/ TICO TICO (Un),"-3,00",OK
+Req p inventário,534447,BICO SIMPLES 1.20 RAYTOOLS CÓD WELLE 8645 (Un),"-9,00",OK
+Req p inventário,209911,ENGATE RÁPIDO C2 COM ESCAMA 050030005 (Un),"-2,00",OK
+Req p inventário,117112,TARUGO NYLON RED. DE 35mm. (M),"-6,02",OK
+Req p inventário,648374,INS SPMT 12.04.08 D,"-5,00",OK
+Req p inventário,650505,INS XCMT 08.03.04 MF IC908 (Un),"-10,00",OK
+Req p inventário,201235,CAIXA P/ MONT. S/EMB. STECK 23X17X9 X 231 (Un),"-6,00",OK
+Req p inventário,534566,BICO DUPLO 1.2 P/ LASER JFY (PLAQUETA 1550) (Un),"-1,00",OK
+Req p inventário,240084,TEE C/PORCA ANILHA 3/4 16F UNF (Un),"-30,00",OK
+Req p inventário,509268,MANTA PA50 795 X 1270MM (Un),"-16,00",OK
+Req p inventário,533883MEG,BOCAL DE PROTEÇÃO 80A REF.: 220189 MEGAPLASMA (Un),"-1,00",OK
+Req p inventário,398052,KIT ADESIVO BASICA FA4 FB,"-1,00",OK
+Req p inventário,509182,BROCA SDS PLUS 12 X 160 MM (Un),"-2,00",OK
+Req p inventário,300039,SUPORTE P/ ARAME MIG (Un),"-1,00",OK
+Req p inventário,110437,CHUMBO LINGOTE PURO MOLE (KG),"-165,00",OK
+Req p inventário,501151,ROLAMENTO 6206 ZZ (Un),"-2,00",OK
+Req p inventário,702110,MANGOTE P/SOLDADOR (Un),"-10,00",OK
+Req p inventário,240493,FECHO RÁP. P/CARR. LE CÓD.ESP481E (Un),"-64,00",OK
+Req p inventário,240233,MANG A/P SAE,"-10,00",OK
+Req p inventário,234697,ANEL SMS 4 C/ RESSALTO,"-1,00",OK
+Req p inventário,716030,PAPEL OFICIO A,"-2,00",OK
+Req p inventário,200454,RELE INTERFACE CR,"-32,00",OK
+Req p inventário,292048,GAXETA MOLYTHANE POLYPAK STD 37503750 (Un),"-100,00",OK
+Req p inventário,240667,SINALEIRO 12VCC/VCA LED 22MM REF. SDS121 (Un),"-7,00",OK
+Req p inventário,350151,COLA BRANCA (L),"-5,00",OK
+Req p inventário,200485,CAIXA PASS.CEGA STECK 154X110X70 S.SX161 (Un),"-2,00",OK
+Req p inventário,313088,massa p pequenas correções,"-5,00",OK
+Req p inventário,649302,DISCO P/ POLICORTE 1/8 X 10 (Un),"-1,00",OK
+Req p inventário,533786,FITA ISOLANTE 19MM X 20M PRET (Un),"-1,00",OK
+Req p inventário,298876,MACHO ENG RÁPIDO DE 1/2 C/PROTETOR (Un),"-40,00",OK
+Req p inventário,200481,"Sinaleira 12V, 22mm, Amarela (Un)","-1,00",OK
+Req p inventário,649272,DISCO DE DESBASTE 1/4 x 7 x 7/8 (Un),"-12,00",OK
+Req p inventário,497885,FITA MET.P/EMB.,"-32,38",OK
+Req p inventário,350102,ARAME COBREADO MIG 1.2 (ER70S6) (KG),"-60,00",OK
+Req p inventário,289024,ROLAMENTO 30208 SPZ/ZWZ/GBR/1ª L (Un),"-1,00",OK
+Req p inventário,500630,NIPLE 1/4 REF. ARC,"-3,00",OK
+Req p inventário,717096,PINCEL PILOTO QUADRO BRANCO (Un),"-3,00",OK
+Req p inventário,702797,ÓCULOS SOBREPOR VERDE,"-5,00",OK
+Req p inventário,533572,,"-6,00",OK
+Req p inventário,712073,CX LIGA ELASTICA N° 18 C/ 55 UNIDS (Un),"-1,00",OK
+Req p inventário,599071,PALHA DE AÇO Nº 2 (Un),"-6,00",OK
+Req p inventário,501307,PARAFUSO SEX 5/8 X 3.1/2 UNC (Un),"-45,00",OK
+Req p inventário,649914,DISCO DE LIXA 7 G,"-1,00",OK
+Req p inventário,700386,TESOURA 21CM (Un),"-1,00",OK
+Req p inventário,200298,CONECTOR PASSAGEM 8WA1011,"-175,00",OK
+Req p inventário,240494,GANCHO C/ REBAIXO P/ F.RÁPIDO CÓD.ESP482 (Un),"-7,00",OK
+Req p inventário,200457,PRENSA CABO 1 (Un),"-10,00",OK
+Req p inventário,760025,ÁCIDO MURIATICO PARA LIMPEZA (L),"-5,00",OK
+Req p inventário,504774,LUVA FG 1/2 (Un),"-17,00",OK
+Req p inventário,703061,TRAPO COSTURADO (KG),"-325,00",OK
+Req p inventário,274964,PORCA SEXTAVADA G5 1.1/2 UNF (Un),"-127,00",OK
+Req p inventário,641303,BROCA AR 1/8 HAST.CIL.DIN338 (Un),"-1,00",OK
+Req p inventário,704010,AÇÚCAR P/ COPA (KG),"-4,00",OK
+Req p inventário,534299,534299,"-4,00",OK
+Req p inventário,641601,BROCA AR 5/32 HAST.CIL.DIN338 (Un),"-17,00",OK
+Req p inventário,504618,BUJÃO FG 3/4 (Un),"-1,00",OK
+Req p inventário,200439,FLANGE P/ BOT. COM SINALI AF 3 POSIÇÕES CSW F C/ 12918902 (Un),"-10,00",OK
+Req p inventário,649910,DISCO DE LIXA 4.1/2 G,"-360,00",OK
+Req p inventário,649911,DISCO DE LIXA HOOKIT G,"-200,00",OK
+Req p inventário,284191,RETENTOR REF 1707 BR (AR,"-141,00",OK
+Req p inventário,649740,LIXA DE PANO P/ FERRO G,"-1,00",OK
+Req p inventário,649764,LIXA DE PANO P/ FERRO G,"-1,00",OK
+Req p inventário,712024,CORRETIVO (Un),"-1,00",OK
+Req p inventário,258236,PARAFUSO SEXTAVADO 3/4 X 2.1/2 UNC (Un),"-200,00",OK
+Req p inventário,200695,"CABO PP 2 x 1,5mm (M)","-35,00",OK
+Req p inventário,260311,PARAF SEXT 5/8 X 3 G5 (8.8) UNC R.I (Un),"-95,00",OK
+Req p inventário,200484,espaguete termo retrátil 1/2 (M),"-17,00",OK
+Req p inventário,258820,PARAF SEX 1/2 X 4.1/2 8.8 UNF (Un),"-100,00",OK
+Req p inventário,238405,MOLA DA TRAVA DA CBHM (Un),"-80,00",OK
+Req p inventário,299108,CABO DE ACO 3/16 GALV. 6X7 + AF. (M),"-49,20",OK
+Req p inventário,504749,AGUA DEIONIZADA/AUTOCLAVE (L),"-150,00",OK
+Req p inventário,649870,LIXA D'AGUA G,"-70,00",OK
+Req p inventário,222185,PINO TRAVA C/ ARG. 3/8 X 2,"-700,00",OK
+Req p inventário,649855,LIXA D'AGUA G,"-55,00",OK
+Req p inventário,238260,MOLA TRAVA IÇAM. FA/FP/C (Un),"-12,00",OK
+Req p inventário,702093,LENTE ESCURA N 12 (Un),"-34,00",OK
+Req p inventário,258234,PARAF SEX 3/4 X 2 UNC ZB (Un),"-366,00",OK
+Req p inventário,200460,CABO PP 2x1mm (M),"-28,50",OK
+Req p inventário,260137,PARAF SEX 5/8 X 2.1/4 UNC (Un),"-110,00",OK
+Req p inventário,258179,PARAF SEX 1/2 X 4.1/2 UNC (Un),"-254,00",OK
+Req p inventário,212095,ARRUELA LISA 1 CH 3/16 (Un),"-436,00",OK
+Req p inventário,258544,PARAF SEX 1/2 X 3 UNC ZB (Un),"-432,00",OK
+Req p inventário,222356,"GRAMPO R 4,5 X 80 ZB (Un)","-100,00",OK
+Req p inventário,258155,PARAF SEX 1/2 X 3.1/2 UNC ZB (Un),"-308,00",OK
+Req p inventário,760006,DESINFETANTE PERFUMADO (L),"-55,00",OK
+Req p inventário,266176,PLACA DE IDENT. CEMAG (Un),"-1,00",OK
+Req p inventário,212103,ARRUELA LISA 30MM GALV. (Un),"-394,00",OK
+Req p inventário,497875,FRASCO 500ML C/ TAMPA DE LACRE (Un),"-5,00",OK
+Req p inventário,260484,PARAF SEX 1/2 X 1.1/4 UNC (Un),"-347,00",OK
+Req p inventário,712322,CANETA ESCRITA GROSSA (Un),"-10,00",OK
+Req p inventário,257086,"PARAF ALLEN C/ CAB 1/4 X 5/8 UNF (NÃO USAR, SUBSTITUÍDO.) (Un)","-287,00",OK
+Req p inventário,200464,"CABO FLEXIVEL 750V SIL PT 1,5MM (M)","-41,00",OK
+Req p inventário,200463,CABO FLEXIVEL 1MM AZUL (M),"-30,00",OK
+Req p inventário,256161,PARAF FRANC 3/8 X 2 (Un),"-2,00",OK
+Req p inventário,497822,"TUBO EPE DIAM. 30 X 3MM X 1,6M CÓD.T30.3.1,6D30 (Un)","-2180,00",OK
+Req p inventário,701018,ESPONJA DUPLA FACE 60X1 (Un),"-1,00",OK
+Req p inventário,232300,GRAMPO P/ CABO DE ACO,"-50,00",OK
+Req p inventário,258271,PARAF SEX 3/8 X 1.1/2 UNC (Un),"-904,00",OK
+Req p inventário,279419,PORCA DUPLA DE 1/2 UNF,"-3,00",OK
+Req p inventário,256808,PARAF FRANC 3/8 X 1 (Un),"-1,00",OK
+Req p inventário,274057,PORCA SEX 1/2 UNF ZB (Un),"-2778,00",OK
+Req p inventário,258416,PARAF SEX 5/16X 1.1/4 UNC (Un),"-86,00",OK
+Req p inventário,259045,PARAF SEX 1/4 X 2.1/2 UNC (Un),"-305,00",OK
+Req p inventário,274124,PORCA SEX 1/2 UNC ZB (Un),"-212,00",OK
+Req p inventário,212092,ARRUELA LISA 1/2 CHAPA 1/8 ZB OU ZA (Un),"-724,00",OK
+Req p inventário,212091,"ARRUELA LISA 3/8 ZB CHAPA 1,5MM (Un)","-32,00",OK
+Req p inventário,222148,CONTRA PINO 3/16 X 1.1/2 (Un),"-7,00",OK
+Req p inventário,258090,PARAF SEX 5/16X 3/4 UNC ZB (Un),"-91,00",OK
+Req p inventário,200534,TERMINAL ILHOS DUPLO 1.5mm (Un),"-400,00",OK
+Req p inventário,282169,REBITE DE ALUMINIO 6X12 (Un),"-2,00",OK
+Req p inventário,212301,ARR. DE PRES. MÉDIA,"-8,00",OK
+Req p inventário,700208,SACO PARA LIXO COM 40LTS (Un),"-1,00",OK
+Req p inventário,200423,TERM ILHOS TUB 1MM (Un),"-415,00",OK
+Req p inventário,274604,PORCA SEX 3/8 UNC ZB (Un),"-18,00",OK
+Req p inventário,282005,REBITE DE ALUMINIO 4X6 (Un),"-3028,00",OK
+Req p inventário,274355,PORCA SEXT 1/4,"-2500,00",OK
+Req p inventário,200500,TERMINAL ILHOS TUBULAR 1.0mm (Un),"-1000,00",OK
+Req p inventário,274409,PORCA SEX 1/4 UNC ZB (Un),"-10,00",OK
+Req p inventário,717101,COPO PLÁSTICO DE 200ML. (Un),"-55100,00",OK
+Req p inventário,717071,COPO PLASTICO P/ CAFE (Un),"-1850,00",OK
+Req p inventário,200473,"Anilha identificador de fio 2,5MM N°3 (Un)","-68,00",OK
+Req p inventário,200472,"Anilha identificador de fio 2,5MM N°2 (Un)","-41,00",OK
+Req p inventário,200475,"Anilha identificador de fio 2,5MM N°5 (Un)","-62,00",OK
+Req p inventário,212098,ARRUELA LISA 1/4 GALV (Un),"-60,00",OK
+Req p inventário,200474,"Anilha identificador de fio 2,5MM N°4 (Un)","-116,00",OK
+Req p inventário,200476,"Anilha identificador de fio 2,5MM N°6 (Un)","-36,00",OK
+Req p inventário,200478,"Anilha identificador de fio 2,5MM N°8 (Un)","-31,00",OK
+Req p inventário,200477,"Anilha identificador de fio 2,5MM N°7 (Un)","-26,00",OK
+Req p inventário,200479,"Anilha identificador de fio 2,5MM N°9 (Un)","-25,00",OK
+Req p inventário,222438,AÇO MT 60.00 CROMADO SAE 1045 NORMAL - CBH 6t/CBHM CAFEEIRA,"-36,00",OK
+Req p inventário,222434,"AÇO MT 50.8 CROMADO SAE 1045 NORMAL 2"" - CBH/CBHM 5t / 7t","-15,00",OK
+Req p inventário,313132,REDUTOR PARA PU (L),"382,30",OK
+Req p inventário,313136,ESM. PU ACRILICO VERDE (L),"58,52",OK
+Req p inventário,313131,ESM. PU ACRILICO LARANJA (L),"27,04",OK
+Req p inventário,313133,ESM. PU ACRILICO VERMELHO (L),"9,24",OK
+Req p inventário,350631,SOLVENTE (TOLUENO) (L),"50,12",OK
+Req p inventário,350023,ANTI,"25,00",OK
+Req p inventário,313210,CATALISADOR PU 1/1 5058 COMP B (L),"273,29",OK
+Req p inventário,326537,SELADOR P/ MADEIRA,"10,80",OK
+Req p inventário,313135,ESM. PU ACRILICO AZUL (L),"6,16",OK
+Req p inventário,313134,ESM. PU ACRILICO AMARELO (L),"6,16",OK
+Req p inventário,318413,ESM. SINT. LARANJA (L),"3,60",OK
