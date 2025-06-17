@@ -119,7 +119,7 @@ def main():
     while True:
         rows, wks = leitura_google_planilhas("RQ PCP-003-000 (Transferencia Corte)","1t7Q_gwGVAEwNlwgWpLRVy-QbQo7kQ_l6QTjFjBrbWxE")
         
-        if rows:
+        if len(rows) > 0:
             print(f"Encontradas {len(rows)} transferencias a serem processadas.")
             processar_transferencias(rows)
         else:
