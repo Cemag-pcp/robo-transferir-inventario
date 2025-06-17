@@ -87,7 +87,7 @@ def processar_transferencias(rows):
 
                 status = transferindo(nav, 'almox central',dep_destino , rec, qtd, observacao_text)
 
-                preencher_google_planilhas("RQ PCP-003-000 (Transferencia Corte)","1t7Q_gwGVAEwNlwgWpLRVy-QbQo7kQ_l6QTjFjBrbWxE",linha_planilha,status)
+                preencher_google_planilhas("RQ PCP-003-000 (Transferencia Corte)","1t7Q_gwGVAEwNlwgWpLRVy-QbQo7kQ_l6QTjFjBrbWxE",linha_planilha,f"{status} {datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")}")
 
                 # Fechar aba no navegador
                 try:
